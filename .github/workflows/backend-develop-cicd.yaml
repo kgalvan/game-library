@@ -1,0 +1,72 @@
+name: Backend Microservices CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: 'us-east-2'
+      ECR_REGISTRY: "${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push api-gateway Docker image
+        run: |
+          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/api-gateway:latest ./api-gateway
+          docker push ${{ env.ECR_REGISTRY }}/api-gateway:latest
+
+
+      - name: Build and push discovery-server Docker image
+        run: |
+          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/discovery-server:latest ./discovery-server
+          docker push ${{ env.ECR_REGISTRY }}/discovery-server:latest
+
+
+      - name: Build and push user-service Docker image
+        run: |
+          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/user-service:latest ./user-service
+          docker push ${{ env.ECR_REGISTRY }}/user-service:latest
+
+      - name: Build and push game-service Docker image
+        run: |
+          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/game-service:latest ./game-service
+          docker push ${{ env.ECR_REGISTRY }}/game-service:latest
+
+      - name: Build and push review-service Docker image
+        run: |
+          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/review-service:latest ./review-service
+          docker push ${{ env.ECR_REGISTRY }}/review-service:latest
+
+      - name: Deploy to Elastic Beanstalk for api-gateway
+        run: |
+          eb deploy api-gateway-env
+
+      - name: Deploy to Elastic Beanstalk for discovery-server
+        run: |
+          eb deploy discovery-server-env
+
+      - name: Deploy to Elastic Beanstalk for user-service
+        run: |
+          eb deploy user-service-env
+
+      - name: Deploy to Elastic Beanstalk for game-service
+        run: |
+          eb deploy game-service-env
+
+      - name: Deploy to Elastic Beanstalk for review-service
+        run: |
+          eb deploy review-service-env
