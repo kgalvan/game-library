@@ -33,29 +33,29 @@ jobs:
 
       - name: Build and push api-gateway Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/api-gateway:latest ./api-gateway --push
+          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/api-gateway:latest ./api-gateway
           docker push ${{ env.ECR_REGISTRY }}/api-gateway:latest
 
 
       - name: Build and push discovery-server Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/discovery-server:latest ./discovery-server --push
+          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/discovery-server:latest ./discovery-server
           docker push ${{ env.ECR_REGISTRY }}/discovery-server:latest
 
 
       - name: Build and push user-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/user-service:latest ./user-service --push
+          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/user-service:latest ./user-service
           docker push ${{ env.ECR_REGISTRY }}/user-service:latest
 
       - name: Build and push game-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/game-service:latest ./game-service --push
+          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/game-service:latest ./game-service
           docker push ${{ env.ECR_REGISTRY }}/game-service:latest
 
       - name: Build and push review-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t ${{ env.ECR_REGISTRY }}/review-service:latest ./review-service --push
+          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/review-service:latest ./review-service
           docker push ${{ env.ECR_REGISTRY }}/review-service:latest
 
       - name: Deploy to Elastic Beanstalk for api-gateway
