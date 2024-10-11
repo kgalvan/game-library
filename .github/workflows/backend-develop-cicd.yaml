@@ -35,7 +35,7 @@ jobs:
       # Build and deploy discovery-server
       - name: Build and deploy discovery-server Docker image
         run: |
-          cd ../discovery-server
+          cd discovery-server
           docker buildx build --platform linux/amd64 -t kgalvan/discovery-server -f ./Dockerfile .
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use discovery-server-dev  
@@ -53,7 +53,7 @@ jobs:
       # Build and deploy user-service
       - name: Build and deploy user-service Docker image
         run: |
-          cd ./user-service
+          cd ../user-service
           docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./Dockerfile .
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use user-service-dev  
