@@ -35,7 +35,7 @@ jobs:
       # Build and deploy discovery-server
       - name: Build and deploy discovery-server Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t discovery-server -f ./discovery-server/Dockerfile .
+          docker buildx build --platform linux/amd64 -t kgalvan/discovery-server -f ./discovery-server/Dockerfile .
           cd ../discovery-server
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use discovery-server-dev  
@@ -44,7 +44,7 @@ jobs:
       # Build and deploy api-gateway
       - name: Build and deploy api-gateway Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t api-gateway -f ./api-gateway/Dockerfile .
+          docker buildx build --platform linux/amd64 -t kgalvan/api-gateway -f ./api-gateway/Dockerfile .
           cd ../api-gateway
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use api-gateway-dev  
@@ -62,7 +62,7 @@ jobs:
       # Build and deploy game-service
       - name: Build and deploy game-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t game-service -f ./game-service/Dockerfile .
+          docker buildx build --platform linux/amd64 -t kgalvan/game-service -f ./game-service/Dockerfile .
           cd ../game-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use game-service-dev  
@@ -71,11 +71,8 @@ jobs:
       # Build and deploy review-service
       - name: Build and deploy review-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t review-service -f ./review-service/Dockerfile .
+          docker buildx build --platform linux/amd64 -t kgalvan/review-service -f ./review-service/Dockerfile .
           cd ../review-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use review-service-dev  
           eb deploy
-
-
-
