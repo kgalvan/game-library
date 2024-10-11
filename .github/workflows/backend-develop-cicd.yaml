@@ -27,53 +27,55 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: us-east-2
 
-      - name: Log in to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build and push api-gateway Docker image
+      - name: Install Elastic Beanstalk CLI
         run: |
-          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/api-gateway:latest ./api-gateway
-#          docker push ${{ env.ECR_REGISTRY }}/api-gateway:latest
+          pip install awsebcli --upgrade --user
+          export PATH=$HOME/.local/bin:$PATH
 
-
-      - name: Build and push discovery-server Docker image
+      # Build and deploy discovery-server
+      - name: Build and deploy discovery-server Docker image
         run: |
-          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/discovery-server:latest ./discovery-server
-#          docker push ${{ env.ECR_REGISTRY }}/discovery-server:latest
+          docker buildx build --platform linux/amd64 -t discovery-server -f ./discovery-server/Dockerfile .
+          cd ../discovery-server
+          eb init --platform docker --region ${{ secrets.AWS_REGION }}
+          eb use discovery-server-dev  # Replace 'discovery-server-env' with your Elastic Beanstalk environment name
+          eb deploy
 
-
-      - name: Build and push user-service Docker image
+      # Build and deploy api-gateway
+      - name: Build and deploy api-gateway Docker image
         run: |
-          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/user-service:latest ./user-service
-#          docker push ${{ env.ECR_REGISTRY }}/user-service:latest
+          docker buildx build --platform linux/amd64 -t api-gateway -f ./api-gateway/Dockerfile .
+          cd ../api-gateway
+          eb init --platform docker --region ${{ secrets.AWS_REGION }}
+          eb use api-gateway-dev  # Replace 'api-gateway-env' with your Elastic Beanstalk environment name
+          eb deploy
 
-      - name: Build and push game-service Docker image
+      # Build and deploy user-service
+      - name: Build and deploy user-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/game-service:latest ./game-service
-#          docker push ${{ env.ECR_REGISTRY }}/game-service:latest
+          docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./user-service/Dockerfile .
+          cd ./user-service
+          eb init --platform docker --region ${{ secrets.AWS_REGION }}
+          eb use user-service-dev  # Replace 'user-service-env' with your Elastic Beanstalk environment name
+          eb deploy
 
-      - name: Build and push review-service Docker image
+      # Build and deploy game-service
+      - name: Build and deploy game-service Docker image
         run: |
-          docker buildx build --platform linux/amd64 --push -t ${{ env.ECR_REGISTRY }}/review-service:latest ./review-service
-#          docker push ${{ env.ECR_REGISTRY }}/review-service:latest
+          docker buildx build --platform linux/amd64 -t game-service -f ./game-service/Dockerfile .
+          cd ../game-service
+          eb init --platform docker --region ${{ secrets.AWS_REGION }}
+          eb use game-service-dev  # Replace 'game-service-env' with your Elastic Beanstalk environment name
+          eb deploy
 
-      - name: Deploy to Elastic Beanstalk for api-gateway
+      # Build and deploy review-service
+      - name: Build and deploy review-service Docker image
         run: |
-          eb deploy api-gateway-env
+          docker buildx build --platform linux/amd64 -t review-service -f ./review-service/Dockerfile .
+          cd ../review-service
+          eb init --platform docker --region ${{ secrets.AWS_REGION }}
+          eb use review-service-dev  # Replace 'review-service-env' with your Elastic Beanstalk environment name
+          eb deploy
 
-      - name: Deploy to Elastic Beanstalk for discovery-server
-        run: |
-          eb deploy discovery-server-env
 
-      - name: Deploy to Elastic Beanstalk for user-service
-        run: |
-          eb deploy user-service-env
 
-      - name: Deploy to Elastic Beanstalk for game-service
-        run: |
-          eb deploy game-service-env
-
-      - name: Deploy to Elastic Beanstalk for review-service
-        run: |
-          eb deploy review-service-env
