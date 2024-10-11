@@ -38,7 +38,7 @@ jobs:
           docker buildx build --platform linux/amd64 -t discovery-server -f ./discovery-server/Dockerfile .
           cd ../discovery-server
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb use discovery-server-dev  # Replace 'discovery-server-env' with your Elastic Beanstalk environment name
+          eb use discovery-server-dev  
           eb deploy
 
       # Build and deploy api-gateway
@@ -47,7 +47,7 @@ jobs:
           docker buildx build --platform linux/amd64 -t api-gateway -f ./api-gateway/Dockerfile .
           cd ../api-gateway
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb use api-gateway-dev  # Replace 'api-gateway-env' with your Elastic Beanstalk environment name
+          eb use api-gateway-dev  
           eb deploy
 
       # Build and deploy user-service
@@ -56,7 +56,7 @@ jobs:
           docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./user-service/Dockerfile .
           cd ./user-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb use user-service-dev  # Replace 'user-service-env' with your Elastic Beanstalk environment name
+          eb use user-service-dev  
           eb deploy
 
       # Build and deploy game-service
@@ -65,7 +65,7 @@ jobs:
           docker buildx build --platform linux/amd64 -t game-service -f ./game-service/Dockerfile .
           cd ../game-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb use game-service-dev  # Replace 'game-service-env' with your Elastic Beanstalk environment name
+          eb use game-service-dev  
           eb deploy
 
       # Build and deploy review-service
@@ -74,7 +74,7 @@ jobs:
           docker buildx build --platform linux/amd64 -t review-service -f ./review-service/Dockerfile .
           cd ../review-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb use review-service-dev  # Replace 'review-service-env' with your Elastic Beanstalk environment name
+          eb use review-service-dev  
           eb deploy
 
 
