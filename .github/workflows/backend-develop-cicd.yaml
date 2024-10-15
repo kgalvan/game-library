@@ -35,11 +35,17 @@ jobs:
           pip install awsebcli --upgrade --user
           export PATH=$HOME/.local/bin:$PATH
 
+      # Step 1: Create a Docker network
+      - name: Start docker network
+        run: |
+          docker network create game-library-network
+
       # Build and deploy discovery-server
       - name: Build and deploy discovery-server Docker image
         run: |
           cd discovery-server
           docker buildx build --platform linux/amd64 -t kgalvan/discovery-server -f ./Dockerfile --push .
+          docker run -d --network game-library-network -p 8761:8761 --name discovery-server kgalvan/discovery-server
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use discovery-server-dev  
           eb deploy
@@ -49,6 +55,7 @@ jobs:
         run: |
           cd ../api-gateway
           docker buildx build --platform linux/amd64 -t kgalvan/api-gateway -f ./Dockerfile --push .
+          docker run -d --network game-library-network -p 8081:8081 --name api-gateway kgalvan/api-gateway
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use api-gateway-dev  
           eb deploy
@@ -58,6 +65,7 @@ jobs:
         run: |
           cd ../user-service
           docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./Dockerfile --push .
+          docker run -d --network game-library-network -p 8082:8082 --name user-service kgalvan/user-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use user-service-dev  
           eb deploy
@@ -67,6 +75,7 @@ jobs:
         run: |
           cd ../game-service
           docker buildx build --platform linux/amd64 -t kgalvan/game-service -f ./Dockerfile --push .
+          docker run -d --network game-library-network -p 8083:8083 --name game-service kgalvan/game-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use game-service-dev  
           eb deploy
@@ -76,6 +85,7 @@ jobs:
         run: |
           cd ../review-service
           docker buildx build --platform linux/amd64 -t kgalvan/review-service -f ./Dockerfile --push .
+          docker run -d --network game-library-network -p 8084:8084 --name review-service kgalvan/review-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use review-service-dev  
           eb deploy
