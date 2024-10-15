@@ -45,7 +45,7 @@ jobs:
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb list
           eb use discovery-server-dev
-          eb deploy
+          eb deploy --timeout 30
 
       # Build and deploy api-gateway
       - name: Build and deploy api-gateway Docker image
