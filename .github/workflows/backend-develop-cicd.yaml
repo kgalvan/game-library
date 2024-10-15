@@ -43,6 +43,7 @@ jobs:
           docker images
           docker push kgalvan/discovery-server:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
+          eb list
           eb use kgalvan/discovery-server-dev
           eb deploy
 
