@@ -39,9 +39,9 @@ jobs:
       - name: Build and deploy discovery-server Docker image
         run: |
           cd discovery-server
-          docker buildx build --platform linux/amd64 --tag kgalvan/discovery-server -f ./Dockerfile . --load
+          docker buildx build --platform linux/amd64 --tag kgalvan/discovery-server:latest -f ./Dockerfile . --load
           docker images
-          docker push kgalvan:discovery-server
+          docker push kgalvan:discovery-server:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use kgalvan/discovery-server-dev
           eb deploy
