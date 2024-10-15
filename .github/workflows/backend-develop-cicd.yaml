@@ -39,7 +39,8 @@ jobs:
       - name: Build and deploy discovery-server Docker image
         run: |
           cd discovery-server
-          docker buildx build --platform linux/amd64 -t kgalvan/discovery-server -f ./Dockerfile --push .
+          docker buildx build --platform linux/amd64 -t kgalvan/discovery-server -f ./Dockerfile .
+          docker push your-repo/discovery-server
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use discovery-server-dev  
           eb deploy
@@ -48,7 +49,8 @@ jobs:
       - name: Build and deploy api-gateway Docker image
         run: |
           cd ../api-gateway
-          docker buildx build --platform linux/amd64 -t kgalvan/api-gateway -f ./Dockerfile --push .
+          docker buildx build --platform linux/amd64 -t kgalvan/api-gateway -f ./Dockerfile .
+          docker push your-repo/api-gateway
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use api-gateway-dev  
           eb deploy
@@ -57,7 +59,8 @@ jobs:
       - name: Build and deploy user-service Docker image
         run: |
           cd ../user-service
-          docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./Dockerfile --push .
+          docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./Dockerfile .
+          docker push your-repo/user-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use user-service-dev  
           eb deploy
@@ -66,7 +69,8 @@ jobs:
       - name: Build and deploy game-service Docker image
         run: |
           cd ../game-service
-          docker buildx build --platform linux/amd64 -t kgalvan/game-service -f ./Dockerfile --push .
+          docker buildx build --platform linux/amd64 -t kgalvan/game-service -f ./Dockerfile .
+          docker push your-repo/game-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use game-service-dev  
           eb deploy
@@ -75,7 +79,8 @@ jobs:
       - name: Build and deploy review-service Docker image
         run: |
           cd ../review-service
-          docker buildx build --platform linux/amd64 -t kgalvan/review-service -f ./Dockerfile --push .
+          docker buildx build --platform linux/amd64 -t kgalvan/review-service -f ./Dockerfile .
+          docker push your-repo/review-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use review-service-dev  
           eb deploy
