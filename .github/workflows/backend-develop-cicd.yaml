@@ -39,10 +39,10 @@ jobs:
       - name: Build and deploy discovery-server Docker image
         run: |
           cd discovery-server
-          docker buildx build --platform linux/amd64 -t kgalvan/discovery-server-dev:discovery-server -f ./Dockerfile .
-          docker push kgalvan/discovery-server-dev:discovery-server
+          docker buildx build --platform linux/amd64 -t kgalvan/discovery-server-dev -f ./Dockerfile .
+          docker push kgalvan/discovery-server-dev
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb use kgalvan/discovery-server-dev:discovery-server
+          eb use kgalvan/discovery-server-dev
           eb deploy
 
       # Build and deploy api-gateway
