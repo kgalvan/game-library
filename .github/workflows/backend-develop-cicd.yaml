@@ -44,7 +44,7 @@ jobs:
           docker push kgalvan/discovery-server:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb list
-          eb use kgalvan/discovery-server-dev
+          eb use discovery-server-dev
           eb deploy
 
       # Build and deploy api-gateway
