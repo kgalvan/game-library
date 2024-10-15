@@ -39,7 +39,7 @@ jobs:
       - name: Build and deploy discovery-server Docker image
         run: |
           cd discovery-server
-          docker buildx build --platform linux/amd64 --tag kgalvan/discovery-server -f ./Dockerfile .
+          docker buildx build --platform linux/amd64 --tag kgalvan/discovery-server -f ./Dockerfile . --load
           docker images
           docker tag kgalvan/discovery-server kgalvan/discovery-server:latest
           docker push kgalvan:discovery-server-dev/discovery-server:latest
