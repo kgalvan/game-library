@@ -40,7 +40,7 @@ jobs:
         run: |
           cd discovery-server
           docker buildx build --platform linux/amd64 -t kgalvan/discovery-server -f ./Dockerfile .
-          docker push your-repo/discovery-server
+          docker push kgalvan/discovery-server
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use discovery-server-dev  
           eb deploy
@@ -50,7 +50,7 @@ jobs:
         run: |
           cd ../api-gateway
           docker buildx build --platform linux/amd64 -t kgalvan/api-gateway -f ./Dockerfile .
-          docker push your-repo/api-gateway
+          docker push kgalvan/api-gateway
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use api-gateway-dev  
           eb deploy
@@ -60,7 +60,7 @@ jobs:
         run: |
           cd ../user-service
           docker buildx build --platform linux/amd64 -t kgalvan/user-service -f ./Dockerfile .
-          docker push your-repo/user-service
+          docker push kgalvan/user-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use user-service-dev  
           eb deploy
@@ -70,7 +70,7 @@ jobs:
         run: |
           cd ../game-service
           docker buildx build --platform linux/amd64 -t kgalvan/game-service -f ./Dockerfile .
-          docker push your-repo/game-service
+          docker push kgalvan/game-service
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use game-service-dev  
           eb deploy
@@ -80,7 +80,7 @@ jobs:
         run: |
           cd ../review-service
           docker buildx build --platform linux/amd64 -t kgalvan/review-service -f ./Dockerfile .
-          docker push your-repo/review-service
+          docker push kgalvan/discovery-server
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use review-service-dev  
           eb deploy
