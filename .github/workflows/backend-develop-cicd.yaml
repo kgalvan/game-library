@@ -41,19 +41,17 @@ jobs:
         run: |
           cd discovery-server
           docker buildx build --platform linux/amd64 --tag kgalvan/discovery-server:latest -f ./Dockerfile . --load
-          docker images
           docker push kgalvan/discovery-server:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
-          eb list
           eb use discovery-server-dev
           eb deploy --timeout 60
 
       # Build and deploy api-gateway
       - name: Build and deploy api-gateway Docker image
         run: |
-          cd ../api-gateway
-          docker buildx build --platform linux/amd64 -t kgalvan/api-gateway-dev -f ./Dockerfile .
-          docker push kgalvan/api-gateway-dev
+          cd api-gateway
+          docker buildx build --platform linux/amd64 -t kgalvan/api-gateway:latest -f ./Dockerfile . --load
+          docker push kgalvan/api-gateway:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use api-gateway-dev  
           eb deploy
@@ -61,9 +59,9 @@ jobs:
       # Build and deploy user-service
       - name: Build and deploy user-service Docker image
         run: |
-          cd ../user-service
-          docker buildx build --platform linux/amd64 -t kgalvan/user-service-dev -f ./Dockerfile .
-          docker push kgalvan/user-service-dev
+          cd user-service
+          docker buildx build --platform linux/amd64 -t kgalvan/user-service:latest -f ./Dockerfile . --load
+          docker push kgalvan/user-service:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use user-service-dev  
           eb deploy
@@ -71,9 +69,9 @@ jobs:
       # Build and deploy game-service
       - name: Build and deploy game-service Docker image
         run: |
-          cd ../game-service
-          docker buildx build --platform linux/amd64 -t kgalvan/game-service-dev -f ./Dockerfile .
-          docker push kgalvan/game-service-dev
+          cd game-service
+          docker buildx build --platform linux/amd64 -t kgalvan/game-service:latest -f ./Dockerfile . --load
+          docker push kgalvan/game-service:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use game-service-dev  
           eb deploy
@@ -81,9 +79,9 @@ jobs:
       # Build and deploy review-service
       - name: Build and deploy review-service Docker image
         run: |
-          cd ../review-service
-          docker buildx build --platform linux/amd64 -t kgalvan/review-service-dev -f ./Dockerfile .
-          docker push kgalvan/review-service-dev
+          cd review-service
+          docker buildx build --platform linux/amd64 -t kgalvan/review-service:latest -f ./Dockerfile . --load
+          docker push kgalvan/review-service:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use review-service-dev  
           eb deploy
