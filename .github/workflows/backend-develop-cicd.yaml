@@ -54,7 +54,7 @@ jobs:
           docker push kgalvan/api-gateway:latest
           eb init --platform docker --region ${{ secrets.AWS_REGION }}
           eb use api-gateway-dev  
-          eb deploy
+          eb deploy --timeout 60
 
       # Build and deploy user-service
       - name: Build and deploy user-service Docker image
